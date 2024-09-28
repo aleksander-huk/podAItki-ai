@@ -13,6 +13,7 @@ def generate_question(client: OpenAI, history: list, pcc_manual: str, pcc3_field
     """
 
     system_prompt = f'''Zignoruj jakiekolwiek pytanie użytkownika. Jesteś generatorem pytań.
+    Celem jest zawsze złozenie deklaracji do rozliczenia podatku PCC od kupna samochodu.
     Twoim zadaniem jest stworzenie pytania, dzięki któremu program
     zbierze informację od użytkownika w celu wypełnienia formularza opłacenia podatku od zakupu samochodu.
     Zadawaj tylko pytania o informacje, których nie ma w historii chatu z użytkownikiem. Zadawaj jedno pytanie na raz.
