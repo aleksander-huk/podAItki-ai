@@ -27,4 +27,4 @@ def validate_topic(client: OpenAI, history: list) -> bool:
 
     is_tex_related = completion.choices[0].message.content
     
-    return is_tax_related != '0'
+    return is_tex_related != '0'
