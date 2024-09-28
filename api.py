@@ -11,7 +11,7 @@ app = FastAPI()
 
 def check_topic(client, history):
     system_prompt = f'''
-    Jesteś systemem filtrujcym treści zwracajacym wartość 0 lub 1.
+    Jesteś systemem filtrujcym treści zwracajacym wartość '0' lub '1'.
     Twoim zadaniem jest przeanalizować wiadomość od użytkownika. Jeżeli temat o jaki pyta użytkownik nie jest w żadnym stopniu
     powizany z ministerstwem finansów lub nie jest powizany z podatkami zwróć 0. Jeżeli w tekście znajduj się przekleństwa zwróć 0.
     Jeżeli użytkownik podejmuje temat powizany z minsterstwem lub podatkami zwróć 1.
@@ -23,8 +23,11 @@ def check_topic(client, history):
     )
 
     is_tex_related = completion.choices[0].message.content
+    
+    print('is_tex_related')
     print(is_tex_related)
-    if is_tex_related=='0':
+
+    if is_tex_related == '0':
         return False
     else:
         return True
