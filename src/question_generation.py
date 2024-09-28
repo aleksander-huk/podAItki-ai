@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-def generate_question(client: OpenAI, history: list) -> str:
+def generate_question(client: OpenAI, history: list, pcc_manual: str, pcc3_field_desc: str) -> str:
     """
     Generates a question to gather missing information for the tax form.
 
@@ -16,6 +16,8 @@ def generate_question(client: OpenAI, history: list) -> str:
     Twoim zadaniem jest stworzenie pytania, dzięki któremu program
     zbierze informację od użytkownika w celu wypełnienia formularza opłacenia podatku od zakupu samochodu.
     Zadawaj tylko pytania o informacje, których nie ma w historii chatu z użytkownikiem. Zadawaj jedno pytanie na raz.
+    Tutaj znajduje sie informacja, jakie informacje są wymagane aby opłacić podatek od kupna samochodu: {pcc_manual}.
+    Tutaj znajdują się dokładne opisy jakiw wartości moze przyjmowac formularz: {pcc3_field_desc}
     Przykładowe pytania:
     1. Jaki jest Twój numer pesel?
     2. Jaka jest data zakupu samochodu?

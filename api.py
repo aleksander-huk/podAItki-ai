@@ -53,7 +53,7 @@ def generate(history_request: HistoryRequest):
     # Validate if the conversation is tax-related
     if validate_topic(client, history):
         # Generate a question if the topic is valid
-        question = generate_question(client, history)
+        question = generate_question(client, history, pcc_manual, pcc3_field_desc)
         
         # If all necessary questions have been asked, generate XML
         if question == "0":
