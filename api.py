@@ -23,7 +23,7 @@ class HistoryRequest(BaseModel):
 @app.post("/api/generate")
 def generate(history_request: HistoryRequest):
     history = [item.dict() for item in history_request.history]
-    if validate_topic(client, history):
+    if validate_topic(client, history) or len(history)>1:
         question = generate_question(client, history)
         
         if question == "0":
