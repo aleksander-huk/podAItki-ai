@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from src.constants import pcc_manual, xml_example, pcc3_field_desc
 from src.validation import validate_topic, is_user_asking
-from src.question_generation import generate_questionm, generate_rag_response
+from src.question_generation import generate_question, generate_rag_response
 from src.xml_generation import generate_xml
 from openai import OpenAI
 
