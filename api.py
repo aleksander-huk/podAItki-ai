@@ -52,16 +52,21 @@ def generate(history_request: HistoryRequest):
     
     # Validate if the conversation is tax-related
     if validate_topic(client, history):
-        # Generate a question if the topic is valid
-        question = generate_question(client, history, pcc_manual, pcc3_field_desc)
-        
-        # If all necessary questions have been asked, generate XML
-        if question == "0":
-            xml_response = generate_xml(client, pcc_manual, pcc3_field_desc, xml_example, history)
-            return {"response_type": "xml", "content": xml_response}
+        # Validate if user asks a question
+        if is_user_asking(client, history[-1]):
+            rag_answer = generate_rag_response(client, history[-1], pcc_manual)# Ideally create a RAG system for that
+            return {"response_type": "rag", "content": rag_answer + ' Czy chcesz teraz stworzyć XLM aby złoyć wniosek o zapłatę podatku PCC3?'}
         else:
-            # Return the next question
-            return {"response_type": "question", "content": question}
+            # Generate a question if the topic is valid
+            question = generate_question(client, history, pcc_manual, pcc3_field_desc)
+            
+            # If all necessary questions have been asked, generate XML
+            if question == "0":
+                xml_response = generate_xml(client, pcc_manual, pcc3_field_desc, xml_example, history)
+                return {"response_type": "xml", "content": xml_response}
+            else:
+                # Return the next question
+                return {"response_type": "question", "content": question}
     else:
         # Return a message if the topic is unrelated to taxes
         return {"response_type": "unrelated", "content": 'Temat niepowiązany z podatkami'}

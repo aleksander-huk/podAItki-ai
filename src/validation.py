@@ -28,3 +28,30 @@ def validate_topic(client: OpenAI, history: list) -> bool:
     is_tex_related = completion.choices[0].message.content
     
     return is_tex_related != '0'
+
+def is_user_asking(client, history):
+    """
+    Validates if the user asks a question.
+    
+    Args:
+        client (OpenAI): An instance of the OpenAI API client.
+        history (list): A list containing last part of conversation history.
+
+    Returns:
+        bool: Returns True if the query is a question
+    """
+    
+    system_prompt = f'''
+    Jesteś systemem filtrujcym treści zwracajacym wartość '0' lub '1'.
+    Jeeli uyktownik zadał pytanie zwróć wartość 1, jezeli nie zadał pytania, to zwróć 0.
+    Historia chatu: {history}
+    '''
+    
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role" : "user", "content": system_prompt}]
+    )
+
+    is_question = completion.choices[0].message.content
+    
+    return is_question != '0'

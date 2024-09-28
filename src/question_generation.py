@@ -39,3 +39,29 @@ def generate_question(client: OpenAI, history: list, pcc_manual: str, pcc3_field
     question = completion.choices[0].message.content
     
     return question
+
+def generate_rag_response(client: OpenAI, history: list, rag_knowledge: str) -> str:
+    """
+    Generates a response for user question.
+
+    Args:
+        client (OpenAI): An instance of the OpenAI API client.
+        history (list): A list containing the user question.
+
+    Returns:
+        str: Returns the next question to ask or '0' if all required information is gathered.
+    """
+
+    system_prompt = f'''Twoim zadaniem jest odpowiedzieć na pytanie uyktownika uzywając tekstu.
+    Pytanie uytkownika: {history}
+    Tekst: {rag_knowledge}
+    '''
+   
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role" : "user", "content": system_prompt}]
+    )
+
+    question_response = completion.choices[0].message.content
+    
+    return question_response
