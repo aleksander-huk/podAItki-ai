@@ -11,10 +11,10 @@ app = FastAPI()
 
 def check_topic(client, history):
     system_prompt = f'''
-    Jesteś systemem zwracajcym 0 lub 1.
+    Jesteś systemem filtrujcym treści zwracajacym wartość 0 lub 1.
     Twoim zadaniem jest przeanalizować wiadomość od użytkownika. Jeżeli temat o jaki pyta użytkownik nie jest w żadnym stopniu
-    powizany z ministerstwem finansów lub nie jest powizany z podatkami zwróć 0.
-    Jeżeli użytkownik podjemuje jakikolwiek inny temat to zwróć 1.
+    powizany z ministerstwem finansów lub nie jest powizany z podatkami zwróć 0. Jeżeli w tekście znajduj się przekleństwa zwróć 0.
+    Jeżeli użytkownik podejmuje temat powizany z minsterstwem lub podatkami zwróć 1.
     Historia chatu: {history}
     '''
     completion = client.chat.completions.create(
