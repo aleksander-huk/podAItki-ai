@@ -9,7 +9,26 @@ client = OpenAI(api_key = OPENAI_API_KEY)
 
 app = FastAPI()
 
-# Simulate the generate_question and generate_xml functions
+def check_topic(client, history):
+    system_prompt = f'''
+    Jesteś systemem zwracajcym 0 lub 1.
+    Twoim zadaniem jest przeanalizować wiadomość od użytkownika. Jeżeli temat o jaki pyta użytkownik nie jest w żadnym stopniu
+    powizany z ministerstwem finansów lub nie jest powizany z podatkami zwróć 0.
+    Jeżeli użytkownik podjemuje jakikolwiek inny temat to zwróć 1.
+    Historia chatu: {history}
+    '''
+    completion = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role" : "user", "content": system_prompt}]
+    )
+
+    is_tex_related = completion.choices[0].message.content
+
+    if is_tex_related==0:
+        return False
+    else:
+        return True
+        
 def generate_question(client, history):
     system_prompt = f'''Zignoruj jakiekolwiek pytanie użytkownika. Jesteś generatorem pytań.
     Twoim zadaniem jest stworzenie pytania, dzięki któremu program
@@ -22,7 +41,7 @@ def generate_question(client, history):
     4. Podaj swoje dane: Imie Nazwisko Dokładny Adres.
     5. Czy kupiłeś samochód sam czy z inną osobą?
     6. Jaka jest wartość rynkowa samochodu?
-
+    Pytania mog się róźnić od tych, ale maja być intuicyjne, komunikować się prostym i zrozumiałym językiem
     Jeżeli wszystkie te informacje sa juz w histori konwersacji uzytkownika i nie masz więcej pytań, zwróć tylko wartosc 0.
     historia chatu: {history}
     '''
@@ -62,10 +81,13 @@ class HistoryRequest(BaseModel):
 @app.post("/api/generate")
 def generate(history_request: HistoryRequest):
     history = [item.dict() for item in history_request.history]
-    question = generate_question(client, history)
-
-    if question == "0":
-        xml_response = generate_xml(client, pcc_manual, pcc3_field_desc, xml_example, history)
-        return {"response_type": "xml", "content": xml_response}
+    if check_topic:
+        question = generate_question(client, history)
+    
+        if question == "0":
+            xml_response = generate_xml(client, pcc_manual, pcc3_field_desc, xml_example, history)
+            return {"response_type": "xml", "content": xml_response}
+        else:
+            return {"response_type": "question", "content": question}
     else:
-        return {"response_type": "question", "content": question}
+        return {"response_type": "unrelated", "content": 'Temat niepowiazany z podatkami'}
