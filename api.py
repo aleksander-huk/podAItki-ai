@@ -23,7 +23,7 @@ def check_topic(client, history):
     )
 
     is_tex_related = completion.choices[0].message.content
-
+    print(is_tex_related)
     if is_tex_related=='0':
         return False
     else:
