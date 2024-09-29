@@ -35,6 +35,7 @@ class HistoryRequest(BaseModel):
     """
     history: list[HistoryItem]
 
+
 # Define the main API endpoint for generating responses
 @app.post("/api/generate")
 def generate(history_request: HistoryRequest):
