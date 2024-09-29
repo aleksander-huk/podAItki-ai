@@ -44,6 +44,7 @@ def is_user_asking(client, history):
     system_prompt = f'''
     Jesteś systemem filtrujcym treści zwracajacym wartość '0' lub '1'.
     Jeeli uyktownik zadał pytanie zwróć wartość 1, jezeli nie zadał pytania, to zwróć 0.
+    Jezeli uzytkownik w ostatniej odpowiedzi potwierdził, ze chce rozliczyć podatek, zwróć 0.
     Historia chatu: {history}
     '''
     
